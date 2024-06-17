@@ -1,7 +1,8 @@
 <script lang="ts" setup>
 import { reactive, ref, computed } from "vue"
 import { type FormInstance, type FormRules, ComponentSize } from "element-plus"
-import { Iphone, OfficeBuilding, House, Star } from "@element-plus/icons-vue"
+import { Iphone, OfficeBuilding, House, Star, Edit } from "@element-plus/icons-vue"
+import { formatDateTime } from "@/utils"
 
 /** 表单元素的引用 */
 const searchFormRef = ref<FormInstance | null>(null)
@@ -15,6 +16,8 @@ const formRules: FormRules = {
   //   ]
 }
 
+const defaultTime: [Date, Date] = [new Date(2000, 1, 1, 9, 0, 0), new Date(2000, 2, 1, 17, 0, 0)] // '9:00:00', '17:00:00'
+
 /** 表单数据 */
 const searchFormData: any = reactive({
   title: "", // 标题
@@ -27,9 +30,12 @@ const searchFormData: any = reactive({
   registerMethod: "", //报名方式
   sureMoney: "", // 竞价保证金
   bondMoney: "", // 履约保证金
+  registerTime: [], // 报名时间
+  biddingTime: [], // 竞投时间
   decorateRequest: "", // 装修要求
   documentDetail: "", // 证件手续
-  contractDuty: "" // 违约责任
+  contractDuty: "", // 违约责任
+  remark: "" // 其它说明
 })
 
 const size = ref<ComponentSize>("default")
@@ -87,10 +93,30 @@ const handleLogin = () => {
         <el-form-item prop="bondMoney" label="履约保证金">
           <el-input v-model.trim="searchFormData.bondMoney" placeholder="履约保证金" type="text" />
         </el-form-item>
+        <el-form-item prop="registerTime" label="报名时间">
+          <el-date-picker
+            v-model="searchFormData.registerTime"
+            type="datetimerange"
+            range-separator="至"
+            start-placeholder="开始时间"
+            end-placeholder="结束时间"
+            :default-time="defaultTime"
+          />
+        </el-form-item>
+        <el-form-item prop="biddingTime" label="竞投时间">
+          <el-date-picker
+            v-model="searchFormData.biddingTime"
+            type="datetimerange"
+            range-separator="至"
+            start-placeholder="开始时间"
+            end-placeholder="结束时间"
+            :default-time="defaultTime"
+          />
+        </el-form-item>
         <el-form-item prop="payMethod" label="租金缴交方式">
           <el-input
             v-model.trim="searchFormData.payMethod"
-            placeholder="租金缴交方式"
+            placeholder="租金缴交方式（月、半年、年，递增方式）"
             :autosize="{ minRows: 2, maxRows: 10 }"
             type="textarea"
           />
@@ -106,7 +132,7 @@ const handleLogin = () => {
         <el-form-item prop="documentDetail" label="证件手续">
           <el-input
             v-model.trim="searchFormData.documentDetail"
-            placeholder="证件手续"
+            placeholder="证件手续（产权证、建设工程规划许可证、消防验收）"
             :autosize="{ minRows: 2, maxRows: 10 }"
             type="textarea"
           />
@@ -115,6 +141,14 @@ const handleLogin = () => {
           <el-input
             v-model.trim="searchFormData.contractDuty"
             placeholder="违约责任"
+            :autosize="{ minRows: 2, maxRows: 10 }"
+            type="textarea"
+          />
+        </el-form-item>
+        <el-form-item prop="remark" label="其它说明">
+          <el-input
+            v-model.trim="searchFormData.remark"
+            placeholder="其它说明"
             :autosize="{ minRows: 2, maxRows: 10 }"
             type="textarea"
           />
@@ -226,6 +260,36 @@ const handleLogin = () => {
           <template #label>
             <div class="cell-item">
               <el-icon :style="iconStyle">
+                <iphone />
+              </el-icon>
+              报名时间
+            </div>
+          </template>
+          {{
+            searchFormData.registerTime
+              ? `${formatDateTime(searchFormData.registerTime[0])} 至 ${formatDateTime(searchFormData.registerTime[1])}`
+              : ""
+          }}
+        </el-descriptions-item>
+        <el-descriptions-item :span="3">
+          <template #label>
+            <div class="cell-item">
+              <el-icon :style="iconStyle">
+                <iphone />
+              </el-icon>
+              竞投时间
+            </div>
+          </template>
+          {{
+            searchFormData.biddingTime
+              ? `${formatDateTime(searchFormData.biddingTime[0])} 至 ${formatDateTime(searchFormData.biddingTime[1])}`
+              : ""
+          }}
+        </el-descriptions-item>
+        <el-descriptions-item :span="3">
+          <template #label>
+            <div class="cell-item">
+              <el-icon :style="iconStyle">
                 <Van />
               </el-icon>
               租金缴交方式
@@ -265,6 +329,17 @@ const handleLogin = () => {
             </div>
           </template>
           {{ searchFormData.contractDuty }}
+        </el-descriptions-item>
+        <el-descriptions-item :span="3">
+          <template #label>
+            <div class="cell-item">
+              <el-icon :style="iconStyle">
+                <Edit />
+              </el-icon>
+              其它说明
+            </div>
+          </template>
+          {{ searchFormData.remark }}
         </el-descriptions-item>
       </el-descriptions>
     </div>
