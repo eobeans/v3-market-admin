@@ -42,7 +42,8 @@
     "vue-router": "4.3.2",
     "vxe-table": "4.6.17",
     "vxe-table-plugin-element": "4.0.3",
-    "xe-utils": "3.5.26"
+    "xe-utils": "3.5.26",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@types/js-cookie": "3.0.6",
@@ -50,6 +51,7 @@
     "@types/node": "20.12.12",
     "@types/nprogress": "0.2.3",
     "@types/path-browserify": "1.0.2",
+    "@types/xlsx": "^0.0.36",
     "@typescript-eslint/eslint-plugin": "7.10.0",
     "@typescript-eslint/parser": "7.10.0",
     "@vitejs/plugin-vue": "5.0.4",
