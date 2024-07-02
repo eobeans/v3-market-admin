@@ -32,3 +32,16 @@ export const resetConfigLayout = () => {
   removeConfigLayout()
   location.reload()
 }
+
+// 生成随机字符串
+export const generateSecureRandomString = (length: number) => {
+  const array = new Uint8Array(length)
+  window.crypto.getRandomValues(array)
+  const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+  const charactersLength = characters.length
+  let result = ""
+  for (let i = 0; i < length; i++) {
+    result += characters.charAt(array[i] % charactersLength)
+  }
+  return result
+}

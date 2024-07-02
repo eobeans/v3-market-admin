@@ -39,6 +39,13 @@ export default ({ mode }: ConfigEnv): UserConfigExport => {
           ws: true,
           /** 是否允许跨域 */
           changeOrigin: true
+        },
+        "/api/v2": {
+          target: "http://localhost:3000",
+          ws: true,
+          /** 是否允许跨域 */
+          changeOrigin: true,
+          rewrite: (path) => path.replace(/^\/api\/v2/, "")
         }
       },
       /** 预热常用文件，提高初始页面加载速度 */

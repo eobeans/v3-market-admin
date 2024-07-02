@@ -62,16 +62,32 @@ export const constantRoutes: RouteRecordRaw[] = [
     ]
   },
   {
-    path: "/tool",
+    path: "/market",
     component: Layouts,
-    redirect: "/tool/index",
+    redirect: "/market/table",
     children: [
       {
-        path: "index",
-        component: () => import("@/views/tool/search/index.vue"),
-        name: "tool",
+        path: "table",
+        component: () => import("@/views/market/table/index.vue"),
+        name: "MarketTable",
         meta: {
-          title: "工具",
+          title: "市场列表",
+          svgIcon: "menu"
+        }
+      }
+    ]
+  },
+  {
+    path: "/tool",
+    component: Layouts,
+    redirect: "/tool/search",
+    children: [
+      {
+        path: "tool",
+        component: () => import("@/views/tool/search/index.vue"),
+        name: "Tool",
+        meta: {
+          title: "搜索工具",
           svgIcon: "unocss"
         }
       }
@@ -147,7 +163,7 @@ export const constantRoutes: RouteRecordRaw[] = [
   //       }
   //     }
   //   ]
-  // },
+  // }
   // {
   //   path: "/menu",
   //   component: Layouts,

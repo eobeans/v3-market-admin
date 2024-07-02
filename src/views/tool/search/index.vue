@@ -2,6 +2,9 @@
 import { reactive, ref, computed } from "vue"
 import { type FormInstance, type FormRules, ComponentSize } from "element-plus"
 import { Iphone, OfficeBuilding, House, Star, Edit, Shop } from "@element-plus/icons-vue"
+import { generateSecureRandomString } from "@/utils"
+import { createMarketDataApi, updateMarketDataApi } from "@/api/market"
+import { type CreateOrUpdateMarketRequestData } from "@/api/market/types/market"
 // import * as XLSX from "xlsx"
 
 // /** 导出excel */
@@ -32,7 +35,8 @@ const formRules: FormRules = {
 // const defaultTime: [Date, Date] = [new Date(2000, 1, 1, 9, 0, 0), new Date(2000, 2, 1, 17, 0, 0)] // '9:00:00', '17:00:00'
 
 /** 表单数据 */
-const searchFormData: any = reactive({
+const searchFormData: CreateOrUpdateMarketRequestData = reactive({
+  id: "",
   title: "珠海市斗门区路南永就围新青农贸市场交易公告", // 标题
   rentPrice: "19.5万元/月", // 月租金
   coverArea: "3684.00 平方米", // 占地面积
@@ -69,6 +73,18 @@ const iconStyle = computed(() => {
 /** 表单填充逻辑 */
 const handleLogin = () => {
   console.log("显示格式化后的内容")
+}
+
+// 保存JSON数据
+const saveForm = () => {
+  console.log(searchFormData)
+  const params: CreateOrUpdateMarketRequestData = searchFormData
+  if (params.id) {
+    updateMarketDataApi(params)
+  } else {
+    params.id = generateSecureRandomString(8)
+    createMarketDataApi(params)
+  }
 }
 </script>
 <template>
@@ -209,7 +225,7 @@ const handleLogin = () => {
           </template>
           {{ searchFormData.title }}
         </el-descriptions-item>
-        <el-descriptions-item>
+        <el-descriptions-item :span="3">
           <template #label>
             <div class="cell-item">
               <el-icon :style="iconStyle">
@@ -220,7 +236,7 @@ const handleLogin = () => {
           </template>
           {{ searchFormData.coverArea }}
         </el-descriptions-item>
-        <el-descriptions-item>
+        <el-descriptions-item :span="3">
           <template #label>
             <div class="cell-item">
               <el-icon :style="iconStyle">
@@ -231,7 +247,7 @@ const handleLogin = () => {
           </template>
           {{ searchFormData.buildArea }}
         </el-descriptions-item>
-        <el-descriptions-item>
+        <el-descriptions-item :span="3">
           <template #label>
             <div class="cell-item">
               <el-icon :style="iconStyle">
@@ -242,7 +258,7 @@ const handleLogin = () => {
           </template>
           {{ searchFormData.operaYear }}
         </el-descriptions-item>
-        <el-descriptions-item>
+        <el-descriptions-item :span="3">
           <template #label>
             <div class="cell-item">
               <el-icon :style="iconStyle">
@@ -253,7 +269,7 @@ const handleLogin = () => {
           </template>
           {{ searchFormData.rentFreeDate }}
         </el-descriptions-item>
-        <el-descriptions-item>
+        <el-descriptions-item :span="3">
           <template #label>
             <div class="cell-item">
               <el-icon :style="iconStyle">
@@ -264,7 +280,7 @@ const handleLogin = () => {
           </template>
           {{ searchFormData.registerMethod }}
         </el-descriptions-item>
-        <el-descriptions-item>
+        <el-descriptions-item :span="3">
           <template #label>
             <div class="cell-item">
               <el-icon :style="iconStyle">
@@ -275,7 +291,7 @@ const handleLogin = () => {
           </template>
           {{ searchFormData.biddingMethod }}
         </el-descriptions-item>
-        <el-descriptions-item>
+        <el-descriptions-item :span="3">
           <template #label>
             <div class="cell-item">
               <el-icon :style="iconStyle">
@@ -286,7 +302,7 @@ const handleLogin = () => {
           </template>
           {{ searchFormData.rentPrice }}
         </el-descriptions-item>
-        <el-descriptions-item>
+        <el-descriptions-item :span="3">
           <template #label>
             <div class="cell-item">
               <el-icon :style="iconStyle">
@@ -297,7 +313,7 @@ const handleLogin = () => {
           </template>
           {{ searchFormData.sureMoney }}
         </el-descriptions-item>
-        <el-descriptions-item>
+        <el-descriptions-item :span="3">
           <template #label>
             <div class="cell-item">
               <el-icon :style="iconStyle">
@@ -386,6 +402,9 @@ const handleLogin = () => {
           {{ searchFormData.remark }}
         </el-descriptions-item>
       </el-descriptions>
+    </div>
+    <div ml-6 mr-6 mb-6 text-center>
+      <el-button type="primary" @click="saveForm">保存</el-button>
     </div>
   </div>
 </template>
