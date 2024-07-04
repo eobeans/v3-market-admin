@@ -1,7 +1,8 @@
 <script lang="ts" setup>
 import { nextTick, reactive, ref } from "vue"
 import { type ElMessageBoxOptions, ElMessageBox, ElMessage } from "element-plus"
-import { deleteMarketDataApi, getMarketDataApi } from "@/api/market"
+import { generateSecureRandomString } from "@/utils"
+import { deleteMarketDataApi, getMarketDataApi, createMarketDataApi, updateMarketDataApi } from "@/api/market"
 import { type GetMarketResponseData, type CreateOrUpdateMarketRequestData } from "@/api/market/types/market"
 // import RoleColumnSolts from "./tsx/RoleColumnSolts"
 // import StatusColumnSolts from "./tsx/StatusColumnSolts"
@@ -19,7 +20,7 @@ defineOptions({
   name: "VxeTable"
 })
 
-//#region vxe-grid
+//#region vxe-grid  查询表单
 interface RowMeta extends CreateOrUpdateMarketRequestData {}
 
 const xGridDom = ref<VxeGridInstance>()
@@ -34,17 +35,10 @@ const xGridOpt: VxeGridProps = reactive({
   formConfig: {
     items: [
       {
-        field: "username",
+        field: "title",
         itemRender: {
           name: "$input",
-          props: { placeholder: "用户名", clearable: true }
-        }
-      },
-      {
-        field: "phone",
-        itemRender: {
-          name: "$input",
-          props: { placeholder: "手机号", clearable: true }
+          props: { placeholder: "公告标题", clearable: true }
         }
       },
       {
@@ -81,7 +75,7 @@ const xGridOpt: VxeGridProps = reactive({
     },
     {
       field: "title",
-      title: "市场名"
+      title: "公告标题"
     },
     {
       field: "rentPrice",
@@ -140,9 +134,9 @@ const xGridOpt: VxeGridProps = reactive({
 
           /** 接口需要的参数 */
           const params = {
-            title: form.title || undefined,
-            size: page.pageSize,
-            currentPage: page.currentPage
+            title_like: form.title || undefined,
+            _limit: page.pageSize,
+            _page: page.currentPage
           }
           /** 调用接口 */
           getMarketDataApi(params).then(callback).catch(callback)
@@ -153,13 +147,14 @@ const xGridOpt: VxeGridProps = reactive({
 })
 //#endregion
 
-//#region vxe-modal
+//#region vxe-modal  新增、修改弹窗
 const xModalDom = ref<VxeModalInstance>()
 const xModalOpt: VxeModalProps = reactive({
   title: "",
   showClose: true,
   escClosable: true,
   maskClosable: true,
+  width: "60%",
   beforeHideMethod: () => {
     xFormDom.value?.clearValidate()
     return Promise.resolve()
@@ -167,7 +162,7 @@ const xModalOpt: VxeModalProps = reactive({
 })
 //#endregion
 
-//#region vxe-form
+//#region vxe-form  新增、修改表单
 const xFormDom = ref<VxeFormInstance>()
 const xFormOpt: VxeFormProps = reactive({
   span: 24,
@@ -177,19 +172,118 @@ const xFormOpt: VxeFormProps = reactive({
   titleColon: false,
   /** 表单数据 */
   data: {
-    username: "",
-    password: ""
+    id: "",
+    title: "", // 标题
+    rentPrice: "", // 月租金
+    coverArea: "", // 占地面积
+    buildArea: "", // 建筑面积
+    operaYear: "", // 经营年限
+    rentFreeDate: "", // 免租期
+    registerMethod: "", //报名方式
+    biddingMethod: "", //竞价方式
+    sureMoney: "", // 竞价保证金
+    bondMoney: "", // 履约保证金
+    registerTime: "", // 报名时间
+    biddingTime: "", // 竞投时间
+    payMethod: "", // 租金缴交方式
+    decorateRequest: "", // 装修要求
+    documentDetail: "", // 证件手续
+    contractDuty: "", // 违约责任
+    remark: "" // 其它说明
   },
   /** 项列表 */
   items: [
     {
-      field: "username",
-      title: "用户名",
+      field: "title",
+      title: "标题",
+      span: 12,
       itemRender: { name: "$input", props: { placeholder: "请输入" } }
     },
     {
-      field: "password",
-      title: "密码",
+      field: "rentPrice",
+      title: "月租金",
+      span: 12,
+      itemRender: { name: "$input", props: { placeholder: "请输入" } }
+    },
+    {
+      field: "coverArea",
+      title: "占地面积",
+      span: 12,
+      itemRender: { name: "$input", props: { placeholder: "请输入" } }
+    },
+    {
+      field: "buildArea",
+      title: "建筑面积",
+      span: 12,
+      itemRender: { name: "$input", props: { placeholder: "请输入" } }
+    },
+    {
+      field: "operaYear",
+      title: "经营年限",
+      span: 12,
+      itemRender: { name: "$input", props: { placeholder: "请输入" } }
+    },
+    {
+      field: "rentFreeDate",
+      title: "免租期",
+      span: 12,
+      itemRender: { name: "$input", props: { placeholder: "请输入" } }
+    },
+    {
+      field: "registerMethod",
+      title: "报名方式",
+      span: 12,
+      itemRender: { name: "$input", props: { placeholder: "请输入" } }
+    },
+    {
+      field: "biddingMethod",
+      title: "竞价方式",
+      span: 12,
+      itemRender: { name: "$input", props: { placeholder: "请输入" } }
+    },
+    {
+      field: "sureMoney",
+      title: "竞价保证金",
+      itemRender: { name: "$input", props: { placeholder: "请输入" } }
+    },
+    {
+      field: "bondMoney",
+      title: "履约保证金",
+      itemRender: { name: "$input", props: { placeholder: "请输入" } }
+    },
+    {
+      field: "registerTime",
+      title: "报名时间",
+      itemRender: { name: "$input", props: { placeholder: "请输入" } }
+    },
+    {
+      field: "biddingTime",
+      title: "竞投时间",
+      itemRender: { name: "$input", props: { placeholder: "请输入" } }
+    },
+    {
+      field: "payMethod",
+      title: "租金缴交方式",
+      itemRender: { name: "$input", props: { placeholder: "月、季、半年、年缴，递增方式" } }
+    },
+    {
+      field: "decorateRequest",
+      title: "装修要求",
+      itemRender: { name: "$input", props: { placeholder: "请输入" } }
+    },
+    {
+      field: "documentDetail",
+      title: "证件手续",
+      itemRender: { name: "$input", props: { placeholder: "产权证、建设工程规划许可证、一消消防证" } }
+    },
+    {
+      field: "contractDuty",
+      title: "违约责任",
+      itemRender: { name: "$input", props: { placeholder: "请输入" } }
+    },
+    {
+      field: "remark",
+      title: "其它说明",
       itemRender: { name: "$input", props: { placeholder: "请输入" } }
     },
     {
@@ -250,16 +344,16 @@ const crudStore = reactive({
   onShowModal: (row?: RowMeta) => {
     if (row) {
       crudStore.isUpdate = true
-      xModalOpt.title = "修改用户"
+      xModalOpt.title = "修改市场"
       // 赋值
-      // xFormOpt.data.username = row.username
+      xFormOpt.data = row
     } else {
       crudStore.isUpdate = false
-      xModalOpt.title = "新增用户"
+      xModalOpt.title = "新增市场"
     }
     // 禁用表单项
-    const props = xFormOpt.items?.[0]?.itemRender?.props
-    props && (props.disabled = crudStore.isUpdate)
+    // const props = xFormOpt.items?.[0]?.itemRender?.props
+    // props && (props.disabled = crudStore.isUpdate)
     xModalDom.value?.open()
     nextTick(() => {
       !crudStore.isUpdate && xFormDom.value?.reset()
@@ -281,10 +375,17 @@ const crudStore = reactive({
       }
       if (crudStore.isUpdate) {
         // 模拟调用修改接口成功
-        setTimeout(() => callback(), 1000)
+        // setTimeout(() => callback(), 1000)
+        updateMarketDataApi(xFormOpt.data).then(() => {
+          callback()
+        })
       } else {
         // 模拟调用新增接口成功
-        setTimeout(() => callback(), 1000)
+        // setTimeout(() => callback(), 1000)
+        xFormOpt.data.id = generateSecureRandomString(8)
+        createMarketDataApi(xFormOpt.data).then(() => {
+          callback()
+        })
       }
     })
   },
@@ -300,8 +401,7 @@ const crudStore = reactive({
   },
   /** 删除 */
   onDelete: (row: RowMeta) => {
-    // const tip = `确定 <strong style="color: var(--el-color-danger);"> 删除 </strong> 用户 <strong style="color: var(--el-color-primary);"> ${row.username} </strong> ？`
-    const tip = `确定 <strong style="color: var(--el-color-danger);"> 删除 </strong> 用户 <strong style="color: var(--el-color-primary);"> </strong> ？`
+    const tip = `确定 <strong style="color: var(--el-color-danger);"> 删除 </strong> 市场 <strong style="color: var(--el-color-primary);"> ${row.title} </strong> ？`
     const config: ElMessageBoxOptions = {
       type: "warning",
       showClose: true,
@@ -339,8 +439,8 @@ const crudStore = reactive({
     <vxe-grid ref="xGridDom" v-bind="xGridOpt">
       <!-- 左侧按钮列表 -->
       <template #toolbar-btns>
-        <vxe-button status="primary" icon="vxe-icon-add" @click="crudStore.onShowModal()">新增用户</vxe-button>
-        <vxe-button status="danger" icon="vxe-icon-delete">批量删除</vxe-button>
+        <vxe-button status="primary" icon="vxe-icon-add" @click="crudStore.onShowModal()">新增市场</vxe-button>
+        <!-- <vxe-button status="danger" icon="vxe-icon-delete">批量删除</vxe-button> -->
       </template>
       <!-- 操作 -->
       <template #row-operate="{ row }">

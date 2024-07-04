@@ -26,6 +26,14 @@ export interface GetMarketRequestData {
   size?: number
   /** 查询参数：市场名 */
   title?: string
+  /** 当前页码 */
+  _page?: number
+  /** 查询条数 */
+  _limit?: number
+  /** 查询参数：市场名 */
+  title_like?: string
+  /** 查询参数：排序desc asc */
+  _order?: string
 }
 
 export interface GetMarketData {

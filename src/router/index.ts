@@ -65,6 +65,7 @@ export const constantRoutes: RouteRecordRaw[] = [
     path: "/market",
     component: Layouts,
     redirect: "/market/table",
+    name: "Market",
     children: [
       {
         path: "table",
@@ -81,89 +82,90 @@ export const constantRoutes: RouteRecordRaw[] = [
     path: "/tool",
     component: Layouts,
     redirect: "/tool/search",
+    name: "Tool",
     children: [
       {
-        path: "tool",
+        path: "search",
         component: () => import("@/views/tool/search/index.vue"),
-        name: "Tool",
+        name: "ToolSearch",
         meta: {
           title: "搜索工具",
           svgIcon: "unocss"
         }
       }
     ]
+  },
+  {
+    path: "/unocss",
+    component: Layouts,
+    redirect: "/unocss/index",
+    children: [
+      {
+        path: "index",
+        component: () => import("@/views/unocss/index.vue"),
+        name: "UnoCSS",
+        meta: {
+          title: "UnoCSS",
+          svgIcon: "unocss"
+        }
+      }
+    ]
+  },
+  {
+    path: "/link",
+    meta: {
+      title: "外链",
+      svgIcon: "link"
+    },
+    children: [
+      {
+        path: "https://juejin.cn/post/7089377403717287972",
+        component: () => {},
+        name: "Link1",
+        meta: {
+          title: "中文文档"
+        }
+      },
+      {
+        path: "https://juejin.cn/column/7207659644487139387",
+        component: () => {},
+        name: "Link2",
+        meta: {
+          title: "新手教程"
+        }
+      }
+    ]
+  },
+  {
+    path: "/table",
+    component: Layouts,
+    redirect: "/table/element-plus",
+    name: "Table",
+    meta: {
+      title: "表格",
+      elIcon: "Grid"
+    },
+    children: [
+      {
+        path: "element-plus",
+        component: () => import("@/views/table/element-plus/index.vue"),
+        name: "ElementPlus",
+        meta: {
+          title: "Element Plus",
+          keepAlive: true
+        }
+      },
+      {
+        path: "vxe-table",
+        component: () => import("@/views/table/vxe-table/index.vue"),
+        name: "VxeTable",
+        meta: {
+          title: "Vxe Table",
+          keepAlive: true
+        }
+      }
+    ]
   }
-  // {
-  //   path: "/unocss",
-  //   component: Layouts,
-  //   redirect: "/unocss/index",
-  //   children: [
-  //     {
-  //       path: "index",
-  //       component: () => import("@/views/unocss/index.vue"),
-  //       name: "UnoCSS",
-  //       meta: {
-  //         title: "UnoCSS",
-  //         svgIcon: "unocss"
-  //       }
-  //     }
-  //   ]
-  // },
-  // {
-  //   path: "/link",
-  //   meta: {
-  //     title: "外链",
-  //     svgIcon: "link"
-  //   },
-  //   children: [
-  //     {
-  //       path: "https://juejin.cn/post/7089377403717287972",
-  //       component: () => {},
-  //       name: "Link1",
-  //       meta: {
-  //         title: "中文文档"
-  //       }
-  //     },
-  //     {
-  //       path: "https://juejin.cn/column/7207659644487139387",
-  //       component: () => {},
-  //       name: "Link2",
-  //       meta: {
-  //         title: "新手教程"
-  //       }
-  //     }
-  //   ]
-  // },
-  // {
-  //   path: "/table",
-  //   component: Layouts,
-  //   redirect: "/table/element-plus",
-  //   name: "Table",
-  //   meta: {
-  //     title: "表格",
-  //     elIcon: "Grid"
-  //   },
-  //   children: [
-  //     {
-  //       path: "element-plus",
-  //       component: () => import("@/views/table/element-plus/index.vue"),
-  //       name: "ElementPlus",
-  //       meta: {
-  //         title: "Element Plus",
-  //         keepAlive: true
-  //       }
-  //     },
-  //     {
-  //       path: "vxe-table",
-  //       component: () => import("@/views/table/vxe-table/index.vue"),
-  //       name: "VxeTable",
-  //       meta: {
-  //         title: "Vxe Table",
-  //         keepAlive: true
-  //       }
-  //     }
-  //   ]
-  // }
   // {
   //   path: "/menu",
   //   component: Layouts,

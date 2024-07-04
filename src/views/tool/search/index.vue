@@ -90,7 +90,7 @@ const saveForm = () => {
 <template>
   <!-- <div ml-20 mt-2><el-button @click="exportExcel">导出Excel文件</el-button></div> -->
   <div flex flex-col w-full>
-    <div bg-emerald p-6>
+    <div p-6>
       <el-form
         ref="searchFormRef"
         :model="searchFormData"

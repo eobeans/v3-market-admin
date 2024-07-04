@@ -21,7 +21,7 @@ export function deleteMarketDataApi(id: string) {
 /** 改 */
 export function updateMarketDataApi(data: Market.CreateOrUpdateMarketRequestData) {
   return request({
-    url: "market",
+    url: `market/${data.id}`,
     method: "put",
     data
   })
