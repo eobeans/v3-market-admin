@@ -87,10 +87,10 @@ const saveForm = () => {
   }
 }
 </script>
+
 <template>
-  <!-- <div ml-20 mt-2><el-button @click="exportExcel">导出Excel文件</el-button></div> -->
-  <div flex flex-col w-full>
-    <div p-6>
+  <div class="app-container" flex flex-col>
+    <div>
       <el-form
         ref="searchFormRef"
         :model="searchFormData"
@@ -212,7 +212,7 @@ const saveForm = () => {
         </el-row>
       </el-form>
     </div>
-    <div flex justify-center m-6>
+    <div flex justify-center>
       <el-descriptions class="margin-top" :title="searchFormData.title" :column="3" :size="size" border>
         <el-descriptions-item :span="3">
           <template #label>
@@ -403,8 +403,9 @@ const saveForm = () => {
         </el-descriptions-item>
       </el-descriptions>
     </div>
-    <div ml-6 mr-6 mb-6 text-center>
+    <div mt-6 text-center>
       <el-button type="primary" @click="saveForm">保存</el-button>
+      <!-- <el-button type="primary" @click="exportExcel">导出Excel文件</el-button> -->
     </div>
   </div>
 </template>
