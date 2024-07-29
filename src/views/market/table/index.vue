@@ -189,7 +189,19 @@ const xFormOpt: VxeFormProps = reactive({
     decorateRequest: "", // 装修要求
     documentDetail: "", // 证件手续
     contractDuty: "", // 违约责任
-    remark: "" // 其它说明
+    remark: "", // 其它说明
+    flawSituation: "", // 瑕疵情况
+    upgrade: "", // 升级改造
+    sureMoneyReturnMethod: "", // 保证金退回方式（财务）
+    firstRent: "", // 首期租金（财务）
+    insure: "", // 保险要求（运营）
+    peopleArrange: "", // 人员安排（运营）
+    publicTime: "", // 公示时间（运营）
+    handoverTime: "", // 交接时间（运营）
+    handoverAddress: "", // 交接地点（运营）
+    handoverContact: "", // 交接联系人和方式（运营）
+    decorateDesc: "", // 装修要求（工程）
+    contact: "" // 联系人和方式
   },
   /** 项列表 */
   items: [
@@ -244,27 +256,31 @@ const xFormOpt: VxeFormProps = reactive({
     {
       field: "sureMoney",
       title: "竞价保证金",
+      span: 12,
       itemRender: { name: "$input", props: { placeholder: "请输入" } }
     },
     {
       field: "bondMoney",
       title: "履约保证金",
-      itemRender: { name: "$input", props: { placeholder: "请输入" } }
-    },
-    {
-      field: "registerTime",
-      title: "报名时间",
+      span: 12,
       itemRender: { name: "$input", props: { placeholder: "请输入" } }
     },
     {
       field: "biddingTime",
       title: "竞投时间",
+      span: 12,
       itemRender: { name: "$input", props: { placeholder: "请输入" } }
     },
     {
       field: "payMethod",
       title: "租金缴交方式",
+      span: 12,
       itemRender: { name: "$input", props: { placeholder: "月、季、半年、年缴，递增方式" } }
+    },
+    {
+      field: "registerTime",
+      title: "报名时间",
+      itemRender: { name: "$input", props: { placeholder: "请输入" } }
     },
     {
       field: "decorateRequest",
@@ -279,6 +295,73 @@ const xFormOpt: VxeFormProps = reactive({
     {
       field: "contractDuty",
       title: "违约责任",
+      itemRender: { name: "$input", props: { placeholder: "请输入" } }
+    },
+    {
+      field: "flawSituation",
+      title: "瑕疵情况",
+      itemRender: { name: "$input", props: { placeholder: "请输入" } }
+    },
+    {
+      field: "upgrade",
+      title: "升级改造",
+      itemRender: { name: "$input", props: { placeholder: "请输入" } }
+    },
+    {
+      field: "sureMoneyReturnMethod",
+      title: "保证金退回",
+      itemRender: { name: "$input", props: { placeholder: "请输入" } }
+    },
+    {
+      field: "firstRent",
+      title: "首期租金",
+      span: 12,
+      itemRender: { name: "$input", props: { placeholder: "请输入" } }
+    },
+    {
+      field: "insure",
+      title: "保险要求",
+      span: 12,
+      itemRender: { name: "$input", props: { placeholder: "请输入" } }
+    },
+    {
+      field: "peopleArrange",
+      title: "人员安排",
+      span: 12,
+      itemRender: { name: "$input", props: { placeholder: "请输入" } }
+    },
+    {
+      field: "publicTime",
+      title: "公示时间",
+      span: 12,
+      itemRender: { name: "$input", props: { placeholder: "请输入" } }
+    },
+    {
+      field: "handoverTime",
+      title: "交接时间",
+      span: 12,
+      itemRender: { name: "$input", props: { placeholder: "请输入" } }
+    },
+    {
+      field: "handoverAddress",
+      title: "交接地点",
+      span: 12,
+      itemRender: { name: "$input", props: { placeholder: "请输入" } }
+    },
+    {
+      field: "handoverContact",
+      title: "交接联系方式",
+      span: 12,
+      itemRender: { name: "$input", props: { placeholder: "请输入" } }
+    },
+    {
+      field: "decorateDesc",
+      title: "装修要求",
+      itemRender: { name: "$input", props: { placeholder: "请输入" } }
+    },
+    {
+      field: "contact",
+      title: "联系人和方式",
       itemRender: { name: "$input", props: { placeholder: "请输入" } }
     },
     {
@@ -412,6 +495,9 @@ const crudStore = reactive({
       dangerouslyUseHTMLString: true
     }
     ElMessageBox.confirm(tip, "提示", config).then(() => {
+      if (!row.id) {
+        return
+      }
       deleteMarketDataApi(row.id).then(() => {
         ElMessage.success("删除成功")
         crudStore.afterDelete()
